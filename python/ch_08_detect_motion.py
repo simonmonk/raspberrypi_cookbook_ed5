@@ -1,17 +1,19 @@
 import cv2
 import numpy as np
-from imutils.video import VideoStream
+from picamera2 import Picamera2
 from imutils import resize
 
 diff_threshold = 1000000
 
-vs = VideoStream(src=0).start()
+picam2 = Picamera2()
+picam2.start()
 
 def getImage():
-    im = vs.read()
-    im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-    im = cv2.blur(im, (20, 20))
-    return im
+    img = picam2.capture_array()
+    img = resize(img, width=800)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.blur(img, (3, 3)) 
+    return img
 
 old_image = getImage()
 
